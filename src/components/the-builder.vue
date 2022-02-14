@@ -1,6 +1,7 @@
 <template>
   <div>
-    <json-property :json="builder.root"/>
+    {
+    <json-property :json="builder.root"/>}
     <pre v-html="JSON.stringify(builder.root, null, 2)" />
   </div>
 </template>
