@@ -1,19 +1,18 @@
 <template>
   <div class="prop-container">
-    <span v-html="renderIndentation()" />{
-    <div v-if="json.index >= 0">
-      <span v-html="renderIndentation(1)" />
-      <span @click="focusInput(inputName)">"</span>
-      <input
-        ref="inputName"
-        class="json-name"
-        type="text"
-        v-model="viewModel.name"
-        @blur="saveProperty"
-        @focus="setInputCursor"
-        :style="{ width: `${(viewModel.name.length)}ch` }"
-      />
-      <span @click="focusInput(inputName)">"</span>:&nbsp;
+    <span v-html="renderIndentation(1)" />
+    <span @click="focusInput(inputName)">"</span>
+    <input
+      ref="inputName"
+      class="json-name"
+      type="text"
+      v-model="viewModel.name"
+      @blur="saveProperty"
+      @focus="setInputCursor"
+      :style="{ width: `${(viewModel.name.length)}ch` }"
+    />
+    <span @click="focusInput(inputName)">"</span>:&nbsp;
+    <template v-if="json.children.length === 0">
       <span @click="focusInput(inputValue)">"</span>
       <input
         ref="inputValue"
@@ -25,14 +24,15 @@
         :style="{ width: `${(viewModel.value.length)}ch` }"
       />
       <span @click="focusInput(inputValue)">"</span>
+    </template>
+    <template v-else>
+      {
       <json-property v-for="child in props.json.children" :key="child.path" :json="child" />
-    </div>
-    <div v-else>
-      <json-property v-for="child in props.json.children" :key="child.path" :json="child" />
-      <span v-html="renderIndentation(1)" />
-      <button @click="store.addChild(json.path)">+</button>
-    </div>
-    <span v-html="renderIndentation()" />}
+      <span v-html="renderIndentation(1)" /> },
+    </template>
+    <br />
+    <span v-html="renderIndentation(1)" />
+    <button @click="store.addChild(json.path)">+</button>
   </div>
 </template>
 <script setup lang="ts">
@@ -63,7 +63,7 @@ const setInputCursor = (e: Event) => {
   }
 };
 
-const checkHistory = (): boolean => {
+const shouldSendUpdate = (): boolean => {
   const prevState = history.at(-1);
   if (!prevState) {
     return true;
@@ -75,11 +75,9 @@ const checkHistory = (): boolean => {
 };
 
 const saveProperty = () => {
-  if (props.json.index >= 0) {
-    if (checkHistory()) {
-      store.updateProperty(viewModel.value);
-      history.push(viewModel.value);
-    }
+  if (shouldSendUpdate()) {
+    store.updateProperty(viewModel.value);
+    history.push({ ...viewModel.value });
   }
 };
 

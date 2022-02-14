@@ -27,21 +27,26 @@ const useBuilderStore = defineStore('json-builder', {
     root: {
       name: 'root',
       value: '',
-      index: -1,
       offset: 0,
       path: '',
-      children: [],
+      children: [
+        {
+          name: 'child',
+          value: 'test',
+          offset: 1,
+          path: '0',
+          children: [],
+        },
+      ],
     },
   }),
   actions: {
     addChild(parentPath: string): void {
       const parent = parseNodes(this.root, parentPath);
-
       const newChild: IJsonProperty = {
         name: '',
         value: '',
         children: [],
-        index: parent.children.length,
         offset: parent.offset + 1,
         path:
           parentPath === ''
@@ -57,7 +62,12 @@ const useBuilderStore = defineStore('json-builder', {
       const itemIndex = parseInt(property.path.substring(lastPipeIndex + 1), 10);
 
       const parent = parseNodes(this.root, parentPath);
-      parent.children[itemIndex] = property;
+      if (parentPath) {
+        parent.children[itemIndex] = property;
+      } else {
+        parent.name = property.name;
+        parent.value = property.value;
+      }
     },
   },
 });
