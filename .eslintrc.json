@@ -14,7 +14,8 @@
     "implicit-arrow-linebreak": 0
   },
   "globals": {
-    "defineProps": "readonly"
+    "defineProps": "readonly",
+    "defineEmits": "readonly"
   },
   "overrides": [
     {
