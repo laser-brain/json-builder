@@ -1,8 +1,7 @@
 export interface IJsonProperty {
-  index: number,
-  name: string;
-  value: string;// | IJsonProperty[]
-  children: IJsonProperty[],
+  propertyName: string;
+  propertyValue: string;
   offset: number,
-  path: string
+  path: string,
+  [key: string]: IJsonProperty | string | number | undefined
 }

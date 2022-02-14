@@ -7,16 +7,17 @@ type State = {
 
 const parseNodes = (root: IJsonProperty, path: string): IJsonProperty => {
   let parent = root;
-  const pathElements = path.split('|').map((index) => parseInt(index, 10));
+  const pathElements = path.split('|');
+  let pathIndex = 0;
   while (parent.path !== path) {
-    if (!parent.children) {
-      throw new Error(`Expected to find child at path ${path}`);
+    const propertyName = pathElements[pathIndex];
+    parent = JSON.parse(parent[propertyName] as string) as IJsonProperty;
+    if (!parent) {
+      throw new Error(
+        `Expected to find child at ${propertyName} in object ${JSON.stringify(parent, null, 2)}`,
+      );
     }
-
-    parent = parent.children[pathElements[parent.offset]];
-    if (parent === undefined) {
-      throw new Error(`Expected to find an element in ${JSON.stringify(root)} at ${path}`);
-    }
+    pathIndex += 1;
   }
 
   return parent;
@@ -25,12 +26,10 @@ const parseNodes = (root: IJsonProperty, path: string): IJsonProperty => {
 const useBuilderStore = defineStore('json-builder', {
   state: (): State => ({
     root: {
-      name: 'root',
-      value: '',
-      index: -1,
+      propertyName: '',
+      propertyValue: '',
       offset: 0,
       path: '',
-      children: [],
     },
   }),
   actions: {
@@ -38,26 +37,28 @@ const useBuilderStore = defineStore('json-builder', {
       const parent = parseNodes(this.root, parentPath);
 
       const newChild: IJsonProperty = {
-        name: '',
-        value: '',
-        children: [],
-        index: parent.children.length,
+        propertyName: '',
+        propertyValue: '',
         offset: parent.offset + 1,
-        path:
-          parentPath === ''
-            ? parent.children.length.toString()
-            : `${parentPath}|${parent.children.length}`,
+        path: parentPath === '' ? '' : `${parentPath}|new`,
       };
 
-      parent.children.push(newChild);
+      parent.new = JSON.stringify(newChild);
     },
-    updateProperty(property: IJsonProperty): void {
+    updateProperty(currentPath: string, property: IJsonProperty): void {
       const lastPipeIndex = property.path.lastIndexOf('|');
       const parentPath = property.path.substring(0, lastPipeIndex);
-      const itemIndex = parseInt(property.path.substring(lastPipeIndex + 1), 10);
+      const propertyName = parseInt(property.path.substring(lastPipeIndex + 1), 10);
+      const oldName = currentPath.split('|').at(-1);
 
       const parent = parseNodes(this.root, parentPath);
-      parent.children[itemIndex] = property;
+      if (oldName) {
+        parent[oldName] = undefined;
+        parent[propertyName] = JSON.stringify(property);
+      } else {
+        parent.propertyName = property.propertyName;
+        parent.propertyValue = property.propertyValue;
+      }
     },
   },
 });

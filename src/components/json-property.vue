@@ -1,42 +1,48 @@
 <template>
   <div class="prop-container">
     <span v-html="renderIndentation()" />{
-    <div v-if="json.index >= 0">
-      <span v-html="renderIndentation(1)" />
-      <span @click="focusInput(inputName)">"</span>
-      <input
-        ref="inputName"
-        class="json-name"
-        type="text"
-        v-model="viewModel.name"
-        @blur="saveProperty"
-        @focus="setInputCursor"
-        :style="{ width: `${(viewModel.name.length)}ch` }"
+    <br />
+    <span v-html="renderIndentation(1)" />
+    <span @click="focusInput(inputName)">"</span>
+    <input
+      ref="inputName"
+      class="json-name"
+      type="text"
+      v-model="viewModel.propertyName"
+      @blur="saveProperty"
+      @focus="setInputCursor"
+      :style="{ width: `${(viewModel.propertyName.length)}ch` }"
+    />
+    <span @click="focusInput(inputName)">"</span>:&nbsp;
+    <span @click="focusInput(inputValue)">{{ isObject ? '{' : isArray ? '[' : '"' }}</span>
+    <input
+      ref="inputValue"
+      class="json-value"
+      type="text"
+      v-model="viewModel.propertyValue"
+      @blur="saveProperty"
+      @focus="setInputCursor"
+      :style="{ width: `${(viewModel.propertyValue.length)}ch` }"
+    />
+    <span @click="focusInput(inputValue)">"</span>
+    <div v-if="hasChildren()">
+      <json-property
+        v-for="child in getChildren()"
+        :key="child.path"
+        :json="child"
+        @value-reset="resetChild(child)"
       />
-      <span @click="focusInput(inputName)">"</span>:&nbsp;
-      <span @click="focusInput(inputValue)">"</span>
-      <input
-        ref="inputValue"
-        class="json-value"
-        type="text"
-        v-model="viewModel.value"
-        @blur="saveProperty"
-        @focus="setInputCursor"
-        :style="{ width: `${(viewModel.value.length)}ch` }"
-      />
-      <span @click="focusInput(inputValue)">"</span>
-      <json-property v-for="child in props.json.children" :key="child.path" :json="child" />
     </div>
-    <div v-else>
-      <json-property v-for="child in props.json.children" :key="child.path" :json="child" />
-      <span v-html="renderIndentation(1)" />
-      <button @click="store.addChild(json.path)">+</button>
-    </div>
-    <span v-html="renderIndentation()" />}
+    <span v-html="renderIndentation(1)" />
+    <span v-html="renderIndentation()" />
+    <br />}
+    <span>array: {{ isArray }}, object: {{ isObject }}</span>
   </div>
 </template>
 <script setup lang="ts">
-import { PropType, Ref, ref } from 'vue';
+import {
+  PropType, Ref, ref, computed,
+} from 'vue';
 import { IJsonProperty } from '@/types/json';
 import useBuilderStore from '@/stores/builder-store';
 
@@ -50,10 +56,16 @@ const props = defineProps({
   },
 });
 
-const store = useBuilderStore();
-
+const initialState = { ...props.json };
 const viewModel: Ref<IJsonProperty> = ref({ ...props.json });
 const history: IJsonProperty[] = [];
+
+const isArray = computed(() => viewModel.value.propertyValue.startsWith('['));
+const isObject = computed(() => viewModel.value.propertyValue.startsWith('{'));
+const hasChildren = (): boolean => (isArray.value || isObject.value) && typeof props.json.propertyValue === 'object';
+const getChildren = (): IJsonProperty[] => JSON.parse(props.json.propertyValue) as IJsonProperty[];
+
+const store = useBuilderStore();
 
 const setInputCursor = (e: Event) => {
   if (e instanceof FocusEvent && (e as FocusEvent).type === 'focus' && e.target instanceof HTMLInputElement) {
@@ -69,28 +81,35 @@ const checkHistory = (): boolean => {
     return true;
   }
 
-  const { name: prevName, value: prevValue } = prevState;
-  const { name, value } = viewModel.value;
-  return name !== prevName || value !== prevValue;
+  // TODO: Fix history check!
+  return true;
+  //   const { propertyName: prevName, propertyValue: prevValue } = prevState;
+  //   const { propertyName, propertyValue } = viewModel.value;
+  //   return propertyName !== prevName || propertyValue !== prevValue;
 };
 
 const saveProperty = () => {
-  if (props.json.index >= 0) {
-    if (checkHistory()) {
-      store.updateProperty(viewModel.value);
-      history.push(viewModel.value);
-    }
+  if (checkHistory()) {
+    store.updateProperty(initialState.path, viewModel.value);
+    history.push(viewModel.value);
   }
 };
 
 const renderIndentation = (correction?: number) =>
-  '&nbsp;'.repeat((props.json.offset + (correction || 0)) * 4);
+  '&nbsp;'.repeat((props.json.offset + (correction || 0)) * 2);
 
 const focusInput = (target: HTMLInputElement | null) => {
   if (target) {
     target.focus();
   }
 };
+
+const resetChild = (child: IJsonProperty): void => {
+  // eslint-disable-next-line no-param-reassign
+  child.propertyValue = '';
+};
+
+defineEmits(['value-reset']);
 
 </script>
 
