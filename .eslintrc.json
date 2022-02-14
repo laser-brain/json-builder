@@ -33,13 +33,9 @@
     {
       "files": ["*.ts", "*.vue"],
       "rules": {
-        "import/no-unresolved": "off"
-      }
-    },
-    {
-      "files": ["*.ts", "*.vue"],
-      "rules": {
-        "import/extensions": "off"
+        "import/extensions": "off",
+        "import/no-unresolved": "off",
+        "linebreak-style": "off"
       }
     },
     {
