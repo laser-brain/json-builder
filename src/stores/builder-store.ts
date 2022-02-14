@@ -27,7 +27,6 @@ const useBuilderStore = defineStore('json-builder', {
     root: {
       name: 'root',
       value: '',
-      index: -1,
       offset: 0,
       path: '',
       children: [],
@@ -41,7 +40,6 @@ const useBuilderStore = defineStore('json-builder', {
         name: '',
         value: '',
         children: [],
-        index: parent.children.length,
         offset: parent.offset + 1,
         path:
           parentPath === ''
