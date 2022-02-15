@@ -32,7 +32,7 @@ const hideOptions = () => {
 };
 </script>
 <style scoped lang="scss">
-$button-base-dimension: calc(1em + 6px);
+$button-base-dimension: calc(1.5em + 6px);
 
 .options-list::after,
 .button-add::after {
@@ -100,8 +100,8 @@ $button-base-dimension: calc(1em + 6px);
 
     &::after {
       content: "";
-      bottom: -1px;
-      right: -7px;
+      bottom: -.9px;
+      right: -6px;
       border-bottom-left-radius: .2em;
       border-width: 0 0 1px 1px;
       box-shadow: -2px 2px 0 black;
@@ -111,7 +111,7 @@ $button-base-dimension: calc(1em + 6px);
 
 .line {
   position: absolute;
-  top: calc($button-base-dimension + 1em/4 + 5px);
+  top: calc($button-base-dimension - 1px);
   left: 0;
   right: 0;
   grid-row: 1 / 1;

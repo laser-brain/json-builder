@@ -15,7 +15,7 @@
     <click-span v-if="showQuotes" :content="quotes" @clicked="focusInput" />
     <click-span v-if="showBrackets" content="&nbsp;" @clicked="focusInput" />
     <click-span v-if="showBrackets" content="]" @clicked="focusInput" />
-    <input class="input-array" v-if="type === 'value'" type="checkbox" v-model="arrayRef" />
+    <q-toggle v-if="type === 'value'" v-model="arrayRef" />
   </div>
 </template>
 <script setup lang="ts">
@@ -93,9 +93,11 @@ div {
   color: white;
   background-color: transparent;
   font-size: 1em;
+  min-width: none;
 
   &:focus {
     outline: none;
+    min-width: 1ch;
   }
 }
 .input-array {
