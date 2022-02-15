@@ -1,12 +1,19 @@
 <template>
   <div>
     <indented-span :offset="element.offset" />
-    <json-input v-if="element.name !== 'root'" :value="element.name" type="name" />
+    <json-input
+      v-if="element.name !== 'root'"
+      :value="element.name"
+      type="name"
+      :path="element.path"
+    />
     <span v-if="element.name !== 'root'">:&nbsp;</span>{
     <json-property v-for="child in element.children" :element="child" :key="child.name" />
     <br v-if="element.children.length === 0" />
     <indented-span :offset="element.offset + 1" />
-    <type-selection @add-property="builder.addChild(element.path)" />
+    <type-selection
+      @add-property="(type: 'simple' | 'complex') => builder.addChild(element.path, type)"
+    />
     <br />
     <indented-span :offset="element.offset" />}
   </div>
