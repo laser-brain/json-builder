@@ -5,14 +5,15 @@
     </div>
     <div class="line hidden" ref="lineRef" />
     <div class="options-list hidden" @mouseleave="hideOptions" ref="optionsRef">
-      <span>String</span>
-      <span>Number</span>
-      <span>Complex</span>
+      <span @click="emit('add-property', 'simple')">Simple</span>
+      <span @click="emit('add-property', 'complex')">Complex</span>
     </div>
   </div>
 </template>
 <script setup lang="ts">
 import { ref, Ref } from 'vue';
+
+const emit = defineEmits(['add-property']);
 
 const optionsRef: Ref<HTMLElement | null> = ref(null);
 const lineRef: Ref<HTMLElement | null> = ref(null);

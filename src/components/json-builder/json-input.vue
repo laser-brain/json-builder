@@ -68,6 +68,7 @@ const setInputCursor = (e: Event) => {
 .json-name,
 .json-value {
   border: none;
+  color: white;
   background-color: transparent;
   font-size: 1em;
 
