@@ -30,6 +30,7 @@ const useBuilderStore = defineStore('json-builder', {
       offset: 0,
       path: '',
       children: [],
+      isArray: false,
     },
   }),
   actions: {
@@ -45,17 +46,19 @@ const useBuilderStore = defineStore('json-builder', {
           parentPath === ''
             ? parent.children.length.toString()
             : `${parentPath}|${parent.children.length}`,
+        isArray: false,
       };
 
       parent.children.push(newChild);
     },
-    updateProperty(path: string, key: string, value: string): void {
+    updateProperty(path: string, key: string, value: string, isArray: boolean): void {
       const lastPipeIndex = path.lastIndexOf('|');
       const parentPath = path.substring(0, lastPipeIndex);
       const itemIndex = parseInt(path.substring(lastPipeIndex + 1), 10);
 
       const parent = parseNodes(this.root, parentPath);
       parent.children[itemIndex][key] = value;
+      parent.children[itemIndex].isArray = isArray;
     },
   },
 });

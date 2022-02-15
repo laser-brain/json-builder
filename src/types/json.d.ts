@@ -3,6 +3,7 @@ export interface IJsonProperty {
   value: string;
   children: IJsonProperty[],
   offset: number,
-  path: string
-  [key: string]: string | number | IJsonProperty[]
+  path: string,
+  isArray: boolean,
+  [key: string]: string | number | boolean | IJsonProperty[]
 }

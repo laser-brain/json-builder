@@ -1,9 +1,21 @@
 <template>
   <div>
     <indented-span :offset="element.offset" />
-    <json-input ref="inputName" type="name" :value="element.name" :path="element.path" />
+    <json-input
+      ref="inputName"
+      type="name"
+      :value="element.name"
+      :path="element.path"
+      :is-array="element.isArray"
+    />
     <span>:&nbsp;</span>
-    <json-input ref="inputValue" type="value" :value="element.value" :path="element.path" />
+    <json-input
+      ref="inputValue"
+      type="value"
+      :value="element.value"
+      :path="element.path"
+      :is-array="element.isArray"
+    />
   </div>
 </template>
 <script setup lang="ts">
@@ -19,3 +31,10 @@ defineProps({
   },
 });
 </script>
+<style scoped>
+input {
+  margin-left: 1em;
+  vertical-align: middle;
+  display: inline-block;
+}
+</style>
