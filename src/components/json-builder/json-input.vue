@@ -1,5 +1,7 @@
 <template>
   <div>
+    <click-span v-if="showBrackets" content="[" @clicked="focusInput" />
+    <click-span v-if="showBrackets" content="&nbsp;" @clicked="focusInput" />
     <click-span v-if="showQuotes" :content="quotes" @clicked="focusInput" />
     <input
       ref="inputRef"
@@ -11,12 +13,9 @@
       :style="{ width: `${(valueRef.length)}ch` }"
     />
     <click-span v-if="showQuotes" :content="quotes" @clicked="focusInput" />
-    <input
-      class="input-array"
-      v-if="type === 'value'"
-      type="checkbox"
-      v-model="arrayRef"
-    />
+    <click-span v-if="showBrackets" content="&nbsp;" @clicked="focusInput" />
+    <click-span v-if="showBrackets" content="]" @clicked="focusInput" />
+    <input class="input-array" v-if="type === 'value'" type="checkbox" v-model="arrayRef" />
   </div>
 </template>
 <script setup lang="ts">
@@ -64,9 +63,17 @@ const setInputCursor = (e: Event) => {
   }
 };
 
+const showBrackets = computed(() => props.type !== 'name' && arrayRef.value);
+
+const isNumeric = (value: string): boolean => {
+  const x = [...value].map((char) => parseInt(char, 10) < 10);
+  return x.indexOf(false) !== -1;
+};
+
 const showQuotes = computed(() =>
   props.type === 'name'
-  || (Number.isNaN(parseInt(valueRef.value, 10))
+  || valueRef.value.length === 0
+  || (isNumeric(valueRef.value)
     && ['true', 'false'].indexOf(valueRef.value?.toLowerCase()) === -1));
 
 </script>
