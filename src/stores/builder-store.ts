@@ -33,12 +33,12 @@ const useBuilderStore = defineStore('json-builder', {
     },
   }),
   actions: {
-    addChild(parentPath: string): void {
+    addChild(parentPath: string, type: 'simple' | 'complex'): void {
       const parent = parseNodes(this.root, parentPath);
 
       const newChild: IJsonProperty = {
         name: '',
-        value: '',
+        value: type === 'simple' ? '' : 'complex',
         children: [],
         offset: parent.offset + 1,
         path:

@@ -17,19 +17,11 @@
 import { Ref, ref } from 'vue';
 import ClickSpan from '@/components/click-span.vue';
 import useHistory from '@/business/input-history';
+import useBuilderStore from '@/stores/builder-store';
 
-const props = defineProps({
-  value: {
-    type: String,
-    required: true,
-  },
-  type: {
-    type: String,
-    required: true,
-  },
-});
+const builder = useBuilderStore();
 
-const emit = defineEmits(['updated']);
+const props = defineProps<{ value: string, type: string, path: string }>();
 
 const { updateHistory } = useHistory();
 
@@ -37,7 +29,7 @@ const valueRef = ref(props.value);
 
 const saveProperty = () => {
   if (updateHistory(valueRef.value)) {
-    emit('updated', valueRef.value);
+    builder.updateProperty(props.path, props.type, valueRef.value);
   }
 };
 
