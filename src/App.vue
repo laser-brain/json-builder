@@ -19,5 +19,6 @@ import TheBuilder from '@/components/json-builder/the-builder.vue';
   height: 100vh;
   background-color: black;
   color: lightgray;
+  font-size: x-large;
 }
 </style>

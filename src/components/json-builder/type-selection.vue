@@ -32,14 +32,14 @@ const hideOptions = () => {
 };
 </script>
 <style scoped lang="scss">
-.options-list,
-.button-add {
-  &::after {
-    position: absolute;
-    border: 1px solid white;
-    width: 6px;
-    height: 6px;
-  }
+$button-base-dimension: calc(1em + 6px);
+
+.options-list::after,
+.button-add::after {
+  position: absolute;
+  border: 1px solid white;
+  width: 6px;
+  height: 6px;
 }
 
 .options-list {
@@ -52,7 +52,7 @@ const hideOptions = () => {
 
   border: 1px solid white;
   border-top: none;
-  border-radius: 10%;
+  border-radius: .2em;
   border-top-left-radius: 0%;
 
   padding: 4px;
@@ -63,12 +63,12 @@ const hideOptions = () => {
     top: 0;
     right: -1px;
     box-shadow: 2px -2px 0 black;
-    border-top-right-radius: 6px;
+    border-top-right-radius: .2em;
     border-width: 1px 1px 0 0;
   }
 
   & > span {
-    border-radius: 5px;
+  border-radius: .2em;
     padding: 2px;
     cursor: pointer;
 
@@ -85,11 +85,11 @@ const hideOptions = () => {
   justify-content: center;
 
   border: 1px solid white;
-  border-radius: 10%;
+  border-radius: .2em;
 
-  width: 32px;
-  height: 16px;
-  padding: 2px 0 2px 0;
+  width: calc($button-base-dimension * 2);
+  height: $button-base-dimension;
+  padding: calc(1em/4) 0 calc(1em/6) 0;
 
   transition-duration: 200ms;
 
@@ -102,7 +102,7 @@ const hideOptions = () => {
       content: "";
       bottom: -1px;
       right: -7px;
-      border-bottom-left-radius: 6px;
+      border-bottom-left-radius: .2em;
       border-width: 0 0 1px 1px;
       box-shadow: -2px 2px 0 black;
     }
@@ -111,7 +111,7 @@ const hideOptions = () => {
 
 .line {
   position: absolute;
-  top: 21px;
+  top: calc($button-base-dimension + 1em/4 + 5px);
   left: 0;
   right: 0;
   grid-row: 1 / 1;
