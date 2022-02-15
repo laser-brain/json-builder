@@ -10,7 +10,7 @@
 </template>
 <script setup lang="ts">
 import { PropType } from 'vue';
-import FlatValue from '@/components/flat-value.vue';
+import FlatValue from '@/components/json-builder/flat-value.vue';
 import { IJsonProperty } from '@/types/json';
 import IndentedSpan from '@/components/indented-span.vue';
 import useBuilderStore from '@/stores/builder-store';

@@ -6,7 +6,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import JsonProperty from './json-property.vue';
+import JsonProperty from '@/components/json-builder/json-property.vue';
 import useBuilderStore from '@/stores/builder-store';
 
 const builder = useBuilderStore();

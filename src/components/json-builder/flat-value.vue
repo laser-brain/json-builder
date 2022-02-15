@@ -18,7 +18,7 @@
 </template>
 <script setup lang="ts">
 import { PropType } from 'vue';
-import JsonInput from '@/components/json-input.vue';
+import JsonInput from '@/components/json-builder/json-input.vue';
 import IndentedSpan from '@/components/indented-span.vue';
 import { IJsonProperty } from '@/types/json';
 import useBuilderStore from '@/stores/builder-store';

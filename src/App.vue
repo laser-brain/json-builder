@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TheBuilder from './components/the-builder.vue';
+import TheBuilder from '@/components/json-builder/the-builder.vue';
 </script>
 
 <template>
