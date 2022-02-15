@@ -1,6 +1,6 @@
 <template>
   <div style="display: inline-block">
-    <click-span :content="quotes" @clicked="focusInput" />
+    <click-span v-if="showQuotes" :content="quotes" @clicked="focusInput" />
     <input
       ref="inputRef"
       :class="inputClass"
@@ -10,18 +10,18 @@
       @focus="setInputCursor"
       :style="{ width: `${(valueRef.length)}ch` }"
     />
-    <click-span :content="quotes" @clicked="focusInput" />
+    <click-span v-if="showQuotes" :content="quotes" @clicked="focusInput" />
   </div>
 </template>
 <script setup lang="ts">
-import { Ref, ref } from 'vue';
+import { computed, Ref, ref } from 'vue';
 import ClickSpan from '@/components/click-span.vue';
 import useHistory from '@/business/input-history';
 import useBuilderStore from '@/stores/builder-store';
 
 const builder = useBuilderStore();
 
-const props = defineProps<{ value: string, type: string, path: string }>();
+const props = defineProps<{ value: string, type: 'name' | 'value', path: string }>();
 
 const { updateHistory } = useHistory();
 
@@ -50,6 +50,11 @@ const setInputCursor = (e: Event) => {
     input.selectionEnd = input.value.length;
   }
 };
+
+const showQuotes = computed(() =>
+  props.type === 'name'
+  || (Number.isNaN(parseInt(valueRef.value, 10))
+  && ['true', 'false'].indexOf(valueRef.value?.toLowerCase()) === -1));
 
 </script>
 <style scoped lang="scss">
