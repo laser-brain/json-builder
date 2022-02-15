@@ -1,18 +1,18 @@
 <template>
   <div>
-    <indented-span :offset="json.offset" />
+    <indented-span :offset="element.offset" />
     <json-input
       ref="inputName"
-      :type="'name'"
-      :value="json.name"
-      @updated="(newValue) => store.updateProperty(json.path, 'name', newValue)"
+      type="name"
+      :value="element.name"
+      @updated="(newValue) => store.updateProperty(element.path, 'name', newValue)"
     />
     <span>:&nbsp;</span>
     <json-input
       ref="inputValue"
-      :type="'value'"
-      :value="json.value"
-      @updated="(newValue) => store.updateProperty(json.path, 'value', newValue)"
+      type="value"
+      :value="element.value"
+      @updated="(newValue) => store.updateProperty(element.path, 'value', newValue)"
     />
   </div>
 </template>
@@ -26,7 +26,7 @@ import useBuilderStore from '@/stores/builder-store';
 const store = useBuilderStore();
 
 defineProps({
-  json: {
+  element: {
     type: Object as PropType<IJsonProperty>,
     required: true,
   },

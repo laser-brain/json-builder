@@ -26,7 +26,7 @@ const useBuilderStore = defineStore('json-builder', {
   state: (): State => ({
     root: {
       name: 'root',
-      value: '',
+      value: 'complex',
       offset: 0,
       path: '',
       children: [],
