@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { IJsonProperty } from '@/types/json';
+import { getConnectionId } from '@/business/signalR-plugin';
 
 type State = {
   root: IJsonProperty;
@@ -68,7 +69,10 @@ const useBuilderStore = defineStore('json-builder', {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(this.root),
+        body: JSON.stringify({
+          root: this.root,
+          responseId: getConnectionId(),
+        }),
       });
 
       if (response.status >= 300) {
