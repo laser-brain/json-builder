@@ -18,6 +18,7 @@
     <br />
     <indented-span :offset="element.offset" content="}" />
     <span v-if="arrayRef">]</span>
+    <span v-if="element.name !== 'root'">,</span>
     <q-toggle
       v-if="element.name !== 'root'"
       v-model="arrayRef"

@@ -15,6 +15,7 @@
     <click-span v-if="showQuotes" :content="quotes" @clicked="focusInput" />
     <click-span v-if="showBrackets" content="&nbsp;" @clicked="focusInput" />
     <click-span v-if="showBrackets" content="]" @clicked="focusInput" />
+    <click-span v-if="type === 'value'" content="," @clicked="focusInput" />
     <q-toggle
       v-if="type === 'value'"
       v-model="arrayRef"
