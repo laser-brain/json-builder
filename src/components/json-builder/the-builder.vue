@@ -1,6 +1,6 @@
 <template>
   <div>
-    <json-property :element="builder.root"/>
+    <json-property :element="builder.root" />
     <hr />
     <q-spinner v-if="saveOperationPending" />
     <q-btn v-else label="Save" @click="saveJson" color="primary" />
@@ -9,14 +9,17 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import useBuilderStore from '@/stores/builder-store';
-
-const builder = useBuilderStore();
+import { registerCallback } from '@/business/signalR-plugin';
 
 const saveOperationPending = ref(false);
+
+const builder = useBuilderStore();
+registerCallback('onSuccess', () => {
+  saveOperationPending.value = false;
+});
 
 const saveJson = async () => {
   saveOperationPending.value = true;
   await builder.save();
-  saveOperationPending.value = false;
 };
 </script>
