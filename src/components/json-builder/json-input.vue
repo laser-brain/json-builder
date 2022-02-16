@@ -15,7 +15,14 @@
     <click-span v-if="showQuotes" :content="quotes" @clicked="focusInput" />
     <click-span v-if="showBrackets" content="&nbsp;" @clicked="focusInput" />
     <click-span v-if="showBrackets" content="]" @clicked="focusInput" />
-    <q-toggle v-if="type === 'value'" v-model="arrayRef" />
+    <q-toggle
+      v-if="type === 'value'"
+      v-model="arrayRef"
+      label="Allow multiple values"
+      checked-icon="check"
+      unchecked-icon="clear"
+      color="green"
+    />
   </div>
 </template>
 <script setup lang="ts">

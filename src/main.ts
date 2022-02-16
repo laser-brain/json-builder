@@ -5,6 +5,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Quasar } from 'quasar';
 import 'quasar/dist/quasar.css';
+import '@quasar/extras/material-icons/material-icons.css';
 import JsonProperty from '@/components/json-builder/json-property.vue';
 import App from './App.vue';
 

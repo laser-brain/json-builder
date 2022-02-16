@@ -31,10 +31,3 @@ defineProps({
   },
 });
 </script>
-<style scoped>
-input {
-  margin-left: 1em;
-  vertical-align: middle;
-  display: inline-block;
-}
-</style>

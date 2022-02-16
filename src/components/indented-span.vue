@@ -1,13 +1,8 @@
 <template>
-  <span v-html="renderIndentation(offset)" />
+  <span v-html="renderIndentation(offset) + (content || '')" />
 </template>
 <script setup lang="ts">
 import { renderIndentation } from '@/business/strings';
 
-defineProps({
-  offset: {
-    type: Number,
-    required: true,
-  },
-});
+defineProps<{offset: number, content?: string}>();
 </script>
