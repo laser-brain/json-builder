@@ -60,6 +60,21 @@ const useBuilderStore = defineStore('json-builder', {
       parent.children[itemIndex][key] = value;
       parent.children[itemIndex].isArray = isArray;
     },
+    async save(): Promise<void> {
+      const url = 'https://localhost:5001/api/classes';
+      const response = await fetch(url, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(this.root),
+      });
+
+      if (response.status >= 300) {
+        throw new Error(response.statusText);
+      }
+    },
   },
 });
 
