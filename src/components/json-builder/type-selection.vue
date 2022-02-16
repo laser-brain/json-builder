@@ -5,8 +5,8 @@
     </div>
     <div class="line hidden" ref="lineRef" />
     <div class="options-list hidden" @mouseleave="hideOptions" ref="optionsRef">
-      <span @click="emit('add-property', 'simple')">Simple</span>
-      <span @click="emit('add-property', 'complex')">Complex</span>
+      <span @click="addProperty('simple')">Simple</span>
+      <span @click="addProperty('complex')">Complex</span>
     </div>
   </div>
 </template>
@@ -20,15 +20,32 @@ const lineRef: Ref<HTMLElement | null> = ref(null);
 const buttonRef: Ref<HTMLElement | null> = ref(null);
 
 const showOptions = () => {
-  optionsRef.value?.classList.remove('hidden');
-  lineRef.value?.classList.remove('hidden');
+  if (optionsRef.value) {
+    optionsRef.value.classList.remove('hidden');
+    optionsRef.value.style.zIndex = '2';
+  }
+  if (lineRef.value) {
+    lineRef.value.classList.remove('hidden');
+    lineRef.value.style.zIndex = '3';
+  }
   buttonRef.value?.classList.add('open-border');
 };
 
 const hideOptions = () => {
-  optionsRef.value?.classList.add('hidden');
-  lineRef.value?.classList.add('hidden');
+  if (optionsRef.value) {
+    optionsRef.value.classList.add('hidden');
+    optionsRef.value.style.zIndex = '';
+  }
+  if (lineRef.value) {
+    lineRef.value.classList.add('hidden');
+    lineRef.value.style.zIndex = '';
+  }
   buttonRef.value?.classList.remove('open-border');
+};
+
+const addProperty = (type: 'simple' | 'complex') => {
+  hideOptions();
+  emit('add-property', type);
 };
 </script>
 <style scoped lang="scss">
@@ -48,11 +65,13 @@ $button-base-dimension: calc(1.5em + 6px);
 
   display: inline-flex;
   flex-direction: column;
-  position: relative;
+  position: absolute;
+  width: 100%;
+  background: black;
 
   border: 1px solid white;
   border-top: none;
-  border-radius: .2em;
+  border-radius: 0.2em;
   border-top-left-radius: 0%;
 
   padding: 4px;
@@ -63,12 +82,12 @@ $button-base-dimension: calc(1.5em + 6px);
     top: 0;
     right: -1px;
     box-shadow: 2px -2px 0 black;
-    border-top-right-radius: .2em;
+    border-top-right-radius: 0.2em;
     border-width: 1px 1px 0 0;
   }
 
   & > span {
-  border-radius: .2em;
+    border-radius: 0.2em;
     padding: 2px;
     cursor: pointer;
 
@@ -85,12 +104,13 @@ $button-base-dimension: calc(1.5em + 6px);
   justify-content: center;
 
   border: 1px solid white;
-  border-radius: .2em;
+  border-radius: 0.2em;
 
   width: calc($button-base-dimension * 2);
   height: $button-base-dimension;
-  padding: calc(1em/4) 0 calc(1em/6) 0;
+  padding: calc(1em / 4) 0 calc(1em / 6) 0;
 
+  z-index: 1;
   transition-duration: 200ms;
 
   &.open-border {
@@ -100,9 +120,9 @@ $button-base-dimension: calc(1.5em + 6px);
 
     &::after {
       content: "";
-      bottom: -.9px;
+      bottom: -0.9px;
       right: -6px;
-      border-bottom-left-radius: .2em;
+      border-bottom-left-radius: 0.2em;
       border-width: 0 0 1px 1px;
       box-shadow: -2px 2px 0 black;
     }
@@ -112,12 +132,12 @@ $button-base-dimension: calc(1.5em + 6px);
 .line {
   position: absolute;
   top: calc($button-base-dimension - 1px);
-  left: 0;
-  right: 0;
+  left: 2px;
+  right: 4px;
   grid-row: 1 / 1;
   grid-column: 2 / 2;
   border-bottom: 1px solid white;
-  margin-left: 4px;
+  z-index: 1;
 }
 
 .grid {
