@@ -1,2 +1,2 @@
-const events: string[] = ['Success'];
+const events: string[] = ['Success', 'Error'];
 export default events;

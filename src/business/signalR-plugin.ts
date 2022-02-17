@@ -4,7 +4,7 @@ import { App, Plugin } from 'vue';
 interface IAction {
   id: string;
   // eslint-disable-next-line no-unused-vars
-  execute: (...args: any) => void;
+  execute: (...args: any[]) => void;
 }
 
 interface ISignalROptions {
@@ -21,12 +21,12 @@ export function getConnectionId(): string | null {
 const callbacks: IAction[] = [];
 
 // eslint-disable-next-line no-unused-vars
-export function registerCallback(id: string, callbackAction: (...args: any) => any) {
+export function registerCallback(id: string, callbackAction: (...args: any[]) => any) {
   callbacks.push({ id, execute: callbackAction });
 }
 
-function executeCallbacks(id: string) {
-  callbacks.filter((action) => action.id === `on${id}`).forEach((callback) => callback.execute());
+function executeCallbacks(id: string, args: any[]) {
+  callbacks.filter((action) => action.id === `on${id}`).forEach((callback) => callback.execute(args));
 }
 
 const SignalR: Plugin = {
@@ -38,7 +38,7 @@ const SignalR: Plugin = {
 
     const actions: IAction[] = options.events.map((event) => ({
       id: event,
-      execute: () => executeCallbacks(event),
+      execute: (...args: any[]) => executeCallbacks(event, args),
     }));
 
     actions.forEach((action) => {
